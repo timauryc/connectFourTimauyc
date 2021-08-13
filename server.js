@@ -13,12 +13,13 @@ app.get('/games/:player', (req, res) => {
         res.send("<b>Just 2 players allowed<b>")
 });
 
-// io.on('connection', (socket) => {
-//     socket.on('chat message', (msg, path) => {
-//         console.log(`message was sent from ${path}`)
-//         io.emit('chat message', `user from ${path} said ${msg}`);
-//     });
-// });
+io.on('connection', (socket) => {
+    console.info("A connection was established")
+    socket.on('play', (path) => {
+        console.log(`A play was made from ${path}`)
+        io.emit('play', `${path}`);
+    });
+});
 
 server.listen(3000, () => {
     console.log('listening on *:3000');
