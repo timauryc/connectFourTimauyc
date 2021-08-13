@@ -1,6 +1,8 @@
-export default class Game {
+module.exports = class Game {
     constructor() {
         this.turn = "player-one";
+        this.playerOneIn = false;
+        this.playerTwoIn = false;
         this.winningArrays = [
             [0, 1, 2, 3],
             [41, 40, 39, 38],
@@ -76,6 +78,17 @@ export default class Game {
         for (let i = 48; i > 41; i--) {
             this.board[i] = "taken"
         }
+    }
+
+    newPlayer = (player) => {
+        if (player == "player-one")
+            this.playerOneIn = true
+        else
+            this.playerTwoIn = true
+    };
+
+    readyToPlay = () => {
+        return this.playerOneIn && this.playerTwoIn
     }
 }
 

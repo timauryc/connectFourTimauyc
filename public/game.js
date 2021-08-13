@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     var socket = io();
-    alert(squares.length)
     for (let i = 0; i < squares.length; i++) {
         squares[i].onclick = () => {
             let playerId = window.location.pathname.indexOf("1") > -1 ? 1 : 2
