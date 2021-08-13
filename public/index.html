@@ -65,21 +65,6 @@
         <div class="taken"></div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-
-        var form = document.getElementById('form');
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            alert("opa")
-            socket.emit('play', window.location.pathname);
-        });
-
-        socket.on('play', function (path) {
-            alert(`a play was made from ${path}`)
-        });
-    </script>
 </body>
 
 </html>
