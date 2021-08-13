@@ -1,3 +1,5 @@
+const path = require('path')
+const PORT = process.env.PORT || 3000
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -6,11 +8,13 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 
+app.use('/games/:player', express.static(path.join(__dirname, "public")))
+
 app.get('/games/:player', (req, res) => {
-    if (req.params.player == '1' || req.params.player == '2')
-        res.sendFile(__dirname + '/public/game.html');
-    else
-        res.send("<b>Just 2 players allowed<b>")
+    res.send("<b>Just 2 players allowed, please go to /games/1 or games/2<b>")
+    // if (req.params.player == '1' || req.params.player == '2')
+    //     res.sendFile(__dirname + '/public/index.html');
+    // else
 });
 
 io.on('connection', (socket) => {
@@ -21,6 +25,6 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(3000, () => {
+server.listen(PORT, () => {
     console.log('listening on *:3000');
 });
