@@ -14,17 +14,18 @@ app.use('/games/:player', express.static(path.join(__dirname, "public")))
 let game;
 
 io.on('connection', (socket) => {
+    //#region managing a new connection
     console.info(`A connection was established ${socket.request.headers.referer}`)
-    let player = socket.request.headers.referer.indexOf("1") ? "player-one" : "player-two"
+    let player = socket.request.headers.referer.indexOf("1") > -1 ? "player-one" : "player-two"
     if (!game) {
         game = new Game()
         game.newPlayer(player)
-        //io.emit('notify', 'Welcome! waiting for another player to start...')
-        console.log("a new game was created")
-    } else {
-        if (!game.readyToPlay())
-            console.log("lets play")
+        io.emit('notify', 'Welcome! waiting for another player to start...')
+    } else if (!game.readyToPlay() && game.canJoin(player)) {
+        game.newPlayer(player)
+        io.emit('notify', `Great! ${player} has joined the game. Lets play!!`)
     };
+    //#endregion
     socket.on('play', (player, index) => {
         console.log(`A play was made from ${player} on square ${index}`)
         io.emit('play', player, index);

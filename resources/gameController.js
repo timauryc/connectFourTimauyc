@@ -1,6 +1,6 @@
 module.exports = class Game {
     constructor() {
-        this.turn = "player-one";
+        this.turn = "";
         this.playerOneIn = false;
         this.playerTwoIn = false;
         this.winningArrays = [
@@ -85,7 +85,14 @@ module.exports = class Game {
             this.playerOneIn = true
         else
             this.playerTwoIn = true
+
+        if (!this.turn)
+            this.turn = player
     };
+
+    canJoin = (player) => {
+        return player == "player-one" ? !this.playerOneIn : !this.playerTwoIn
+    }
 
     readyToPlay = () => {
         return this.playerOneIn && this.playerTwoIn

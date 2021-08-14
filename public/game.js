@@ -107,10 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
     var socket = io();
     for (let i = 0; i < squares.length; i++) {
         squares[i].onclick = () => {
-            let playerId = window.location.pathname.indexOf("1") > -1 ? 1 : 2
+            let playerId = window.location.pathname.indexOf("1") > -1 ? "player-one" : "player-two"
             socket.emit('play', playerId, i);
         }
     }
+
+    socket.on('notify', function (message) {
+        alert(message)
+    });
 
     socket.on('play', function (player, index) {
         alert(`a play was made from ${player} o square ${index}`)
