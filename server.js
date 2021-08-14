@@ -26,10 +26,21 @@ io.on('connection', (socket) => {
         io.emit('notify', `Great! ${player} has joined the game. Lets play!!`)
     };
     //#endregion
+
+    //#region Managing a play
     socket.on('play', (player, index) => {
-        console.log(`A play was made from ${player} on square ${index}`)
-        io.emit('play', player, index);
+        if (game.getTurn() = player) {
+            if (!game.play(player, index))
+                return socket.emit('feedback', "Sorry, can't do that move")
+            if (game.getWinner())
+                return io.emit('notify', `Congratulations ${player}! You won the game!!`)
+            if (game.isStuck())
+                io.emit('notify', `Hmmm...Seems like we have a draw D:`)
+        } else {
+            socket.emit('feedback', "Chill, it's not your turn :)")
+        }
     });
+    //#endregion
 });
 
 server.listen(PORT, () => {

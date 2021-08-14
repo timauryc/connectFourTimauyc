@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('play', function (player, index) {
-        alert(`a play was made from ${player} o square ${index}`)
+        //TODO Check this
     });
 
 })

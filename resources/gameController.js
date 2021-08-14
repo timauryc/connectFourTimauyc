@@ -1,6 +1,7 @@
 module.exports = class Game {
     constructor() {
-        this.turn = "";
+        this.turn = null;
+        this.winner = null
         this.playerOneIn = false;
         this.playerTwoIn = false;
         this.winningArrays = [
@@ -96,6 +97,57 @@ module.exports = class Game {
 
     readyToPlay = () => {
         return this.playerOneIn && this.playerTwoIn
+    }
+
+    play = (player, i) => {
+        if (this.board[i + 7] && !this.board[i]) {
+            if (player == "player-one") {
+                this.board[i] = 'player-one'
+                this.turn = "player-two"
+            } else if (player == "player-two") {
+                this.board[i] = 'player-two'
+                this.turn = "player-one"
+            }
+            return true
+        } else
+            return false
+    }
+
+    getWinner = () => {
+        for (let y = 0; y < this.winningArrays.length; y++) {
+            const square1 = this.board[this.winningArrays[y][0]]
+            const square2 = this.board[this.winningArrays[y][1]]
+            const square3 = this.board[this.winningArrays[y][2]]
+            const square4 = this.board[this.winningArrays[y][3]]
+
+            //check those squares to see if they all have the class of player-one
+            if (
+                square1 == 'player-one' &&
+                square2 == 'player-one' &&
+                square3 == 'player-one' &&
+                square4 == 'player-one'
+            ) {
+                this.winner = 'player-one'
+            }
+            //check those squares to see if they all have the class of player-two
+            if (
+                square1 == 'player-two' &&
+                square2 == 'player-two' &&
+                square3 == 'player-two' &&
+                square4 == 'player-two'
+            ) {
+                this.winner = 'player-two'
+            }
+        }
+        return this.winner
+    }
+
+    isStuck = () => {
+        return !this.board.includes(undefined)
+    }
+
+    geTurn = () => {
+        return this.turn
     }
 }
 
