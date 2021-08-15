@@ -29,18 +29,27 @@ io.on('connection', (socket) => {
 
     //#region Managing a play
     socket.on('play', (player, index) => {
-        if (game.getTurn() = player) {
-            if (!game.play(player, index))
-                return socket.emit('feedback', "Sorry, can't do that move")
-            if (game.getWinner())
-                return io.emit('notify', `Congratulations ${player}! You won the game!!`)
-            if (game.isStuck())
-                io.emit('notify', `Hmmm...Seems like we have a draw D:`)
+        if (game.getTurn() == player) {
+            if (!game.play(player, index)) {
+                socket.emit('feedback', "Sorry, can't do that move")
+            } else {
+                io.emit('draw', player, index)
+            }
         } else {
             socket.emit('feedback', "Chill, it's not your turn :)")
         }
     });
+    //#endregion managing a finished play
+    
+    //#region managing a successful play 
+    socket.on('verify', (player) => {
+        if (game.getWinner())
+            return io.emit('notify', `Congratulations ${player}! You won the game!!`)
+        if (game.isStuck())
+            io.emit('notify', `Hmmm...Seems like we have a draw D:`)
+    });
     //#endregion
+
 });
 
 server.listen(PORT, () => {

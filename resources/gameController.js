@@ -146,7 +146,7 @@ module.exports = class Game {
         return !this.board.includes(undefined)
     }
 
-    geTurn = () => {
+    getTurn = () => {
         return this.turn
     }
 }
