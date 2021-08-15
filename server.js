@@ -40,15 +40,33 @@ io.on('connection', (socket) => {
         }
     });
     //#endregion managing a finished play
-    
+
     //#region managing a successful play 
     socket.on('verify', (player) => {
-        if (game.getWinner())
-            return io.emit('notify', `Congratulations ${player}! You won the game!!`)
-        if (game.isStuck())
+        if (game.getWinner()) {
+            io.emit('notify', `Congratulations ${player}! You won the game!! Now the game is about to reset`)
+            resetGame()
+        }
+        if (game.isStuck()) {
             io.emit('notify', `Hmmm...Seems like we have a draw D:`)
+            resetGame()
+        }
     });
     //#endregion
+
+    //#region managing a reset
+    socket.on('reset', (player) => {
+        io.emit('notify', `${player} reset the game`)
+        resetGame()
+    });
+    //#endregion
+
+    function resetGame() {
+        io.emit('clearBoard')
+        game = new Game()
+        game.newPlayer("player-one")
+        game.newPlayer("player-two")
+    }
 
 });
 
