@@ -4,8 +4,8 @@ A connect four game developed with NodeJS + Express + Socket.io
 
 The game can be accessed on
 
-*Player 1:* https://whispering-scrubland-21986.herokuapp.com/games/1/
-*player 2:* https://whispering-scrubland-21986.herokuapp.com/games/2/
+- Player 1: https://whispering-scrubland-21986.herokuapp.com/games/1/
+- Player 2: https://whispering-scrubland-21986.herokuapp.com/games/2/
 
 
 ### Topics:
