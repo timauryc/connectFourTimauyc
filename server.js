@@ -17,7 +17,6 @@ let game;
 io.on('connection', (socket) => {
     //#region managing a new connection
     console.info(`A connection was established ${socket.request.headers.referer}`)
-    io.emit('notify' , socket.request.headers.referer)
     let player = socket.request.headers.referer.indexOf("/games/1") > -1 ? "player-one" : "player-two"
     if (!game) {
         game = new Game()
