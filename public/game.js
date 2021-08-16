@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const squares = document.querySelectorAll('.grid div')
-    const result = document.querySelector('#result')
     const displayCurrentPlayer = document.querySelector('#current-player')
     const resetBtn = document.querySelector('#resetBtn')
     let socket = io();
@@ -36,6 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < squares.length; i++) {
             squares[i].classList.remove("player-one")
             squares[i].classList.remove("player-two")
+        }
+    });
+
+    socket.on('resumeGame', function (turn, board) {
+        displayCurrentPlayer.innerHTML = turn
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] == "player-one" || board[i] == "player-two")
+                squares[i].classList.add(board[i])
         }
     });
 })

@@ -9,7 +9,8 @@ const io = new Server(server);
 const Game = require("./resources/gameController")
 
 
-app.use('/games/:player', express.static(path.join(__dirname, "public")))
+app.use('/games/1', express.static(path.join(__dirname, "public")))
+app.use('/games/2', express.static(path.join(__dirname, "public")))
 
 let game;
 
@@ -24,19 +25,25 @@ io.on('connection', (socket) => {
     } else if (!game.readyToPlay() && game.canJoin(player)) {
         game.newPlayer(player)
         io.emit('notify', `Great! ${player} has joined the game. Lets play!!`)
-    };
+    } else {
+        socket.emit('resumeGame', game.getTurn(), game.getBoard())
+    }
     //#endregion
 
     //#region Managing a play
     socket.on('play', (player, index) => {
-        if (game.getTurn() == player) {
-            if (!game.play(player, index)) {
-                socket.emit('feedback', "Sorry, can't do that move")
+        if (game.readyToPlay()) {
+            if (game.getTurn() == player) {
+                if (!game.play(player, index)) {
+                    socket.emit('feedback', "Sorry, can't do that move")
+                } else {
+                    io.emit('draw', player, index)
+                }
             } else {
-                io.emit('draw', player, index)
+                socket.emit('feedback', "Chill, it's not your turn :)")
             }
         } else {
-            socket.emit('feedback', "Chill, it's not your turn :)")
+            socket.emit('feedback', "The other player has not connected yet, let's wait for it :)")
         }
     });
     //#endregion managing a finished play
@@ -44,7 +51,7 @@ io.on('connection', (socket) => {
     //#region managing a successful play 
     socket.on('verify', (player) => {
         if (game.getWinner()) {
-            io.emit('notify', `Congratulations ${player}! You won the game!! Now the game is about to reset`)
+            io.emit('notify', `Congratulations ${player}! You won the game!! Now the game is about to reset...`)
             resetGame()
         }
         if (game.isStuck()) {
