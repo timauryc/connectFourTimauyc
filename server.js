@@ -26,6 +26,7 @@ io.on('connection', (socket) => {
         game.newPlayer(player)
         io.emit('notify', `Great! ${player} has joined the game. Lets play!!`)
     } else {
+        socket.emit('feedback', 'There seems to be a game already going on, if you wish to restart, simply press the restart button.')
         socket.emit('resumeGame', game.getTurn(), game.getBoard())
     }
     //#endregion
